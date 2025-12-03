@@ -10,7 +10,7 @@ compatibility_date = "2024-01-01"
 
 # Optional: Custom domain configuration
 routes = [
-  { pattern = "gpg-badge.hesreallyhim.com/*", zone_name = "yourdomain.com" }
+  { pattern = "gpg-badge.hesreallyhim.com/*", zone_name = "hesreallyhim.com" }
 ]
 
 # Optional: Environment variables (if needed in future)
