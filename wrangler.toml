@@ -9,9 +9,9 @@ compatibility_date = "2024-01-01"
 # Your badge will be available at: https://gpg-badge.<your-subdomain>.workers.dev
 
 # Optional: Custom domain configuration
-# routes = [
-#   { pattern = "gpg-badge.yourdomain.com/*", zone_name = "yourdomain.com" }
-# ]
+routes = [
+  { pattern = "gpg-badge.hesreallyhim.com/*", zone_name = "yourdomain.com" }
+]
 
 # Optional: Environment variables (if needed in future)
 # [vars]
