@@ -1,0 +1,23 @@
+# GitHub GPG Key Badge Service
+# Cloudflare Worker Configuration
+
+name = "gpg-badge"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# Workers.dev subdomain (change after deployment if desired)
+# Your badge will be available at: https://gpg-badge.<your-subdomain>.workers.dev
+
+# Optional: Custom domain configuration
+# routes = [
+#   { pattern = "gpg-badge.yourdomain.com/*", zone_name = "yourdomain.com" }
+# ]
+
+# Optional: Environment variables (if needed in future)
+# [vars]
+# ENVIRONMENT = "production"
+
+# Development settings
+[dev]
+port = 8787
+local_protocol = "http"
