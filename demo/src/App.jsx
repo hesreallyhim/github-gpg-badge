@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Shield, CheckCircle, XCircle, Lock, Copy, Check } from 'lucide-react';
+import { useState } from 'react';
+import { Copy, Check } from 'lucide-react';
 
 export default function GPGBadgeFinal() {
   const [username, setUsername] = useState('torvalds');
