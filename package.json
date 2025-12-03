@@ -1,7 +1,7 @@
 {
   "name": "github-gpg-badge",
   "version": "0.1.0",
-  "description": "Dynamic GitHub GPG key availability badge service",
+  "description": "A server for generating badges that show whether a GitHub user has a GPG key publicly associated with their account",
   "main": "src/index.js",
   "scripts": {
     "dev": "wrangler dev",
