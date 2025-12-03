@@ -1,4 +1,4 @@
-# GitHub GPG Key Badge
+# GitHub GPG Key Badge &nbsp;&nbsp;&nbsp;&nbsp; ![hesreallyhim](https://gpg-badge.hesreallyhim.com/hesreallyhim.svg?style=card)
 
 If you've uploaded a GPG key to GitHub - use this badge to show others, and encourage them to do the same. GPG keys are easy to make, easy to upload, and they make GitHub a safer place for all developers.
 
@@ -20,10 +20,10 @@ HTML:
 </a>
 ```
 
-<!--
+
 ## Try it in the demo
-Explore styles, toggle “available/missing,” and copy-ready URLs/Markdown: **https://gpg-badge.hesreallyhim.com** (replace with your production demo URL if different).
--->
+Explore different styles, and get drop-in URLs/Markdown: **https://github-gpg-badge-demo.vercel.app/**
+
 
 ## Parameters
 - `style`: `split` (default) | `card` | `flat` | `flat-square`
@@ -41,4 +41,3 @@ Examples:
 ---
 
 Created with 🔐 by [hesreallyhim](https://github.com/hesreallyhim).
-

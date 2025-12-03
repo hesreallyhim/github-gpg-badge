@@ -155,7 +155,7 @@ export default function GPGBadgeFinal() {
   };
 
   const generateUrl = () => {
-    const base = `https://gpg-badge.hesreallyhim.workers.dev/${username}.svg`;
+    const base = `https://gpg-badge.hesreallyhim.com/${username}.svg`;
     const params = new URLSearchParams();
     if (style !== 'split') params.set('style', style);
     if (label !== 'GPG Key') params.set('label', label);
