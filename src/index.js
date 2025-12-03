@@ -153,7 +153,7 @@ function hasUserGpgKey(text) {
   const trimmed = text.trim();
   if (!trimmed) return false;
 
-  const hasArmoredBlock = trimmed.includes('-----BEGIN PGP PUBLIC KEYBLOCK-----');
+  const hasArmoredBlock = trimmed.includes('-----BEGIN PGP PUBLIC KEY BLOCK-----');
   if (!hasArmoredBlock) return false;
 
   const placeholder = /hasn't uploaded any gpg keys/i;
