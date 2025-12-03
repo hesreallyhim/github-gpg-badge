@@ -1,9 +1,11 @@
 # GitHub GPG Key Badge
 
-Show that you publish and respect GPG keys. Add this badge to signal that your GitHub account has a public key and encourage contributors to do the same.
+If you've uploaded a GPG key to GitHub - use this badge to show others, and encourage them to do the same. GPG keys are easy to make, easy to upload, and they make GitHub a safer place for all developers.
 
-## Add the badge
-- Use the hosted endpoint: `https://gpg-badge.hesreallyhim.com/<username>.svg`
+## The Badge
+- If you have a GPG key on GitHub, anyone can view it by just visiting `https://github.com/USERNAME.gpg`.
+- This badge just verifies that there is a GPG key there, and it's a nice way to promote key usage. 
+- Use the hosted endpoint: `https://gpg-badge.hesreallyhim.com/<username>.svg`.
 - Replace `<username>` with the GitHub username to check.
 
 Markdown:
@@ -13,13 +15,15 @@ Markdown:
 
 HTML:
 ```html
-<a href="https://github.com/<username>.gpg">
-  <img src="`https://gpg-badge.hesreallyhim.com/<username>.svg" alt="GPG Key badge" />
+<a href="https://github.com/hesreallyhim.gpg">
+  <img src="`https://gpg-badge.hesreallyhim.com/hesreallyhim.svg" alt="GPG Key badge" />
 </a>
 ```
 
+<!--
 ## Try it in the demo
-Explore styles, toggle “available/missing,” and copy-ready URLs/Markdown: **https://gpg-badge.hesreallyhim.workers.dev** (replace with your production demo URL if different).
+Explore styles, toggle “available/missing,” and copy-ready URLs/Markdown: **https://gpg-badge.hesreallyhim.com** (replace with your production demo URL if different).
+-->
 
 ## Parameters
 - `style`: `split` (default) | `card` | `flat` | `flat-square`
@@ -27,6 +31,14 @@ Explore styles, toggle “available/missing,” and copy-ready URLs/Markdown: **
 - `theme`: `dark` (default) | `light` (card style only)
 
 Examples:
-- `https://gpg-badge.hesreallyhim.workers.dev/torvalds.svg` (missing example)
-- `https://gpg-badge.hesreallyhim.workers.dev/hesreallyhim.svg` (verified example)
-- `https://<worker-host>/octocat.svg?style=card&theme=light`
+- `![torvalds](https://gpg-badge.hesreallyhim.com/torvalds.svg)` ![torvalds](https://gpg-badge.hesreallyhim.com/torvalds.svg)  
+- `![hesreallyhim](https://gpg-badge.hesreallyhim.com/torvalds.svg)` ![hesreallyhim](https://gpg-badge.hesreallyhim.com/hesreallyhim.svg)
+
+## More Info:
+- [GitHub's documentation about GPG keys](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
+- [Here's a repo template](https://github.com/hesreallyhim/pgp-inbox-template) for creating your own private messenger right on GitHub using GPG for privacy.
+
+---
+
+Created with 🔐 by [hesreallyhim](https://github.com/hesreallyhim).
+
