@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "tail": "wrangler tail"
+    "tail": "wrangler tail",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [
     "github",
@@ -19,6 +21,7 @@
   "author": "Really Him",
   "license": "MIT",
   "devDependencies": {
+    "vitest": "^4.0.17",
     "wrangler": "^4.59.2"
   }
 }

@@ -1,9 +1,11 @@
+import { escapeXml, isValidUsername, hasUserGpgKey } from './utils.js';
+
 /**
  * GitHub GPG Key Badge - Cloudflare Worker
- * 
+ *
  * Generates dynamic SVG badges showing whether a GitHub user
  * has a public GPG key available at github.com/{username}.gpg
- * 
+ *
  * Usage:
  *   GET /{username}.svg
  *   GET /{username}.svg?style=split|card|flat|flat-square
@@ -132,35 +134,8 @@ const generateErrorBadge = (label = 'GPG Key', message = 'error') => {
 </svg>`;
 };
 
-// Utility to escape XML special characters
-function escapeXml(str) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-}
-
-// Validate GitHub username format
-function isValidUsername(username) {
-  // GitHub usernames: alphanumeric, hyphens, max 39 chars, no consecutive hyphens, can't start/end with hyphen
-  return /^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/.test(username);
-}
-
-// Determine if GitHub response contains a real user-uploaded key (not the placeholder block)
-function hasUserGpgKey(text) {
-  const trimmed = text.trim();
-  if (!trimmed) return false;
-
-  const hasArmoredBlock = trimmed.includes('-----BEGIN PGP PUBLIC KEY BLOCK-----');
-  if (!hasArmoredBlock) return false;
-
-  const placeholder = /hasn't uploaded any gpg keys/i;
-  if (placeholder.test(trimmed)) return false;
-
-  return true;
-}
+// Utility functions imported from ./utils.js:
+// escapeXml, isValidUsername, hasUserGpgKey
 
 // Check if GitHub user has GPG key
 async function checkGpgKey(username) {
