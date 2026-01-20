@@ -42,5 +42,5 @@ The demo calls the Worker host set in `demo/src/App.jsx` (`generateUrl` base).
 
 ## Maintenance notes
 - Keep `wrangler` current (`npm install -D wrangler@latest`).
-- Demo uses Tailwind 3.x; Vite config uses base `/` for Vercel. Adjust base if targeting Pages.
+- Demo uses Tailwind 4.x with the `@tailwindcss/vite` plugin; Vite config uses base `/` for Vercel. Adjust base if targeting Pages.
 - Encourage contributors to publish their GPG keys and adopt the badge in READMEs.
