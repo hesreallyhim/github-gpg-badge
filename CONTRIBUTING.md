@@ -8,7 +8,7 @@ This repository has two parts:
 The production instance is deployed at `https://gpg-badge.hesreallyhim.workers.dev` (and any custom domain configured there). You can self-host or deploy your own instance as described below.
 
 ## Self-hosting the Worker (Cloudflare)
-Prereqs: Node 18+, Cloudflare account, Wrangler.
+Prereqs: Node 20+, Cloudflare account, Wrangler.
 
 1) Install deps (root): `npm install`
 2) Auth: `npx wrangler login`
