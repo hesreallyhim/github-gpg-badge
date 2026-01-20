@@ -1,16 +1,8 @@
 import { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
 
-export default function GPGBadgeFinal() {
-  const [username, setUsername] = useState('torvalds');
-  const [hasKey, setHasKey] = useState(true);
-  const [style, setStyle] = useState('split');
-  const [label, setLabel] = useState('GPG Key');
-  const [theme, setTheme] = useState('dark');
-  const [copied, setCopied] = useState(false);
-
-  // Split Badge Style (Modern Bold bi-colored)
-  const SplitBadge = ({ available, label, scale = 1 }) => {
+// Split Badge Style (Modern Bold bi-colored)
+const SplitBadge = ({ available, label, scale = 1 }) => {
     // Calculate left width based on label length (approximate)
     const labelWidth = label.length * 7.5 + 40; // icon space + padding
     const leftWidth = Math.max(90, labelWidth);
@@ -77,7 +69,7 @@ export default function GPGBadgeFinal() {
       </svg>
     );
   };
-
+  
   // Card Style (Rich Information)
   const CardBadge = ({ available, username, label, isDark = true }) => {
     const bg = isDark ? '#111827' : '#ffffff';
@@ -122,7 +114,7 @@ export default function GPGBadgeFinal() {
       </svg>
     );
   };
-
+  
   // Flat Shields.io style
   const FlatBadge = ({ available, label, square = false }) => {
     const rightWidth = available ? 62 : 42;
@@ -153,8 +145,16 @@ export default function GPGBadgeFinal() {
       </svg>
     );
   };
-
-  const generateUrl = () => {
+  
+  export default function GPGBadgeFinal() {
+    const [username, setUsername] = useState('torvalds');
+    const [hasKey, setHasKey] = useState(true);
+    const [style, setStyle] = useState('split');
+    const [label, setLabel] = useState('GPG Key');
+    const [theme, setTheme] = useState('dark');
+    const [copied, setCopied] = useState(false);
+  
+    const generateUrl = () => {
     const base = `https://gpg-badge.hesreallyhim.com/${username}.svg`;
     const params = new URLSearchParams();
     if (style !== 'split') params.set('style', style);
@@ -193,14 +193,14 @@ export default function GPGBadgeFinal() {
   return (
     <div className="min-h-screen bg-gray-950 text-white p-8">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-bold mb-2 bg-linear-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
           GitHub GPG Key Badge
         </h1>
         <p className="text-gray-400 mb-8">Dynamic badge showing GPG key availability for any GitHub user</p>
         
         {/* Live Preview */}
         <section className="p-8 bg-gray-900 rounded-2xl border border-gray-800 mb-8">
-          <div className="flex justify-center items-center min-h-[80px] mb-6">
+          <div className="flex justify-center items-center min-h-20 mb-6">
             {renderBadge()}
           </div>
           
@@ -345,12 +345,12 @@ export default function GPGBadgeFinal() {
           
           <div className="space-y-6">
             <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl">
-              <div className="flex-shrink-0 mr-4">
+              <div className="shrink-0 mr-4">
                 <span className="text-sm font-medium text-white">split</span>
                 <span className="text-xs text-gray-500 ml-2">(default)</span>
                 <p className="text-xs text-gray-400 mt-1">Modern bi-colored badge with icons</p>
               </div>
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <SplitBadge available={hasKey} label="GPG Key" />
               </div>
             </div>
