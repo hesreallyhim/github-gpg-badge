@@ -21,3 +21,8 @@ routes = [
 [dev]
 port = 8787
 local_protocol = "http"
+
+[observability]
+[observability.logs]
+enabled = true
+invocation_logs = true
