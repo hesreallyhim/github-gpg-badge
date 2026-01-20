@@ -3,7 +3,7 @@
 
 name = "github-gpg-badge"
 main = "src/index.js"
-compatibility_date = "2024-01-01"
+compatibility_date = "2026-01-01"
 
 # Workers.dev subdomain (change after deployment if desired)
 # Your badge will be available at: https://gpg-badge.<your-subdomain>.workers.dev
