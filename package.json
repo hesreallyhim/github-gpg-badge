@@ -20,6 +20,9 @@
   ],
   "author": "Really Him",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "devDependencies": {
     "vitest": "^4.0.17",
     "wrangler": "^4.59.2"
