@@ -9,13 +9,14 @@ import { escapeXml, isValidUsername, hasUserGpgKey } from './utils.js';
  * Usage:
  *   GET /{username}.svg
  *   GET /{username}.svg?style=split|card|flat|flat-square
- *   GET /{username}.svg?label=Custom+Label
  *   GET /{username}.svg?style=card&theme=light|dark
  */
 
 // Badge generation functions
-const generateSplitBadge = (hasKey, label = 'GPG Key') => {
-  const labelWidth = Math.max(90, label.length * 7.5 + 40);
+const LABEL = 'GPG Key';
+
+const generateSplitBadge = (hasKey) => {
+  const labelWidth = 90;
   const rightWidth = hasKey ? 88 : 82;
   const totalWidth = labelWidth + rightWidth;
   const statusText = hasKey ? 'Verified' : 'Missing';
@@ -51,7 +52,7 @@ const generateSplitBadge = (hasKey, label = 'GPG Key') => {
       <rect x="2" y="5" width="10" height="8" rx="1" fill-opacity="0.9"/>
       <path d="M4 5V3.5C4 1.57 5.57 0 7.5 0S11 1.57 11 3.5V5" stroke="white" stroke-width="1.5" fill="none" stroke-opacity="0.9"/>
     </g>
-    <text x="32" y="18" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="600" fill="white">${escapeXml(label)}</text>
+    <text x="32" y="18" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="600" fill="white">${LABEL}</text>
     <g transform="translate(${labelWidth + 10}, 7)" fill="white">
       ${hasKey ? checkIcon : xIcon}
     </g>
@@ -60,7 +61,7 @@ const generateSplitBadge = (hasKey, label = 'GPG Key') => {
 </svg>`;
 };
 
-const generateCardBadge = (hasKey, username, label = 'GPG Key', isDark = true) => {
+const generateCardBadge = (hasKey, username, isDark = true) => {
   const bg = isDark ? '#111827' : '#ffffff';
   const border = isDark ? '#374151' : '#e5e7eb';
   const textPrimary = isDark 
@@ -86,49 +87,49 @@ const generateCardBadge = (hasKey, username, label = 'GPG Key', isDark = true) =
       <path d="M10 0L0 4v6c0 5.55 4.16 10.74 10 12 5.84-1.26 10-6.45 10-12V4L10 0zm0 10.99h8c-.53 4.12-3.28 7.79-8 8.94V11H2V5.3l8-3.11v8.8z"/>
     </g>
     <text x="54" y="22" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" fill="${textSecondary}">@${escapeXml(username)}</text>
-    <text x="54" y="38" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="${textPrimary}">${escapeXml(label)} ${statusText}</text>
+    <text x="54" y="38" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="${textPrimary}">${LABEL} ${statusText}</text>
   </g>
 </svg>`;
 };
 
-const generateFlatBadge = (hasKey, label = 'GPG Key', square = false) => {
+const generateFlatBadge = (hasKey, square = false) => {
   const statusText = hasKey ? 'available' : 'none';
   const rightWidth = hasKey ? 62 : 42;
   const totalWidth = 70 + rightWidth;
   const radius = square ? 0 : 4;
   const rightColor = hasKey ? '#22c55e' : '#6b7280';
-  
+
   return `<svg width="${totalWidth}" height="20" viewBox="0 0 ${totalWidth} 20" xmlns="http://www.w3.org/2000/svg">
   <rect x="0" y="0" width="70" height="20" fill="#555" rx="${radius}" ry="${radius}"/>
   <rect x="${70 - radius}" y="0" width="${radius}" height="20" fill="#555"/>
   <rect x="70" y="0" width="${rightWidth}" height="20" fill="${rightColor}" rx="${radius}" ry="${radius}"/>
   <rect x="70" y="0" width="${radius}" height="20" fill="${rightColor}"/>
   <g fill="#010101" fill-opacity="0.3">
-    <text x="35" y="15" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${escapeXml(label)}</text>
+    <text x="35" y="15" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${LABEL}</text>
     <text x="${70 + rightWidth/2}" y="15" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${statusText}</text>
   </g>
   <g fill="white">
-    <text x="35" y="14" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${escapeXml(label)}</text>
+    <text x="35" y="14" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${LABEL}</text>
     <text x="${70 + rightWidth/2}" y="14" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${statusText}</text>
   </g>
 </svg>`;
 };
 
-const generateErrorBadge = (label = 'GPG Key', message = 'error') => {
+const generateErrorBadge = (message = 'error') => {
   const rightWidth = message.length * 7 + 10;
   const totalWidth = 70 + rightWidth;
-  
+
   return `<svg width="${totalWidth}" height="20" viewBox="0 0 ${totalWidth} 20" xmlns="http://www.w3.org/2000/svg">
   <rect x="0" y="0" width="70" height="20" fill="#555" rx="4" ry="4"/>
   <rect x="66" y="0" width="4" height="20" fill="#555"/>
   <rect x="70" y="0" width="${rightWidth}" height="20" fill="#eab308" rx="4" ry="4"/>
   <rect x="70" y="0" width="4" height="20" fill="#eab308"/>
   <g fill="#010101" fill-opacity="0.3">
-    <text x="35" y="15" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${escapeXml(label)}</text>
+    <text x="35" y="15" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${LABEL}</text>
     <text x="${70 + rightWidth/2}" y="15" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${escapeXml(message)}</text>
   </g>
   <g fill="white">
-    <text x="35" y="14" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${escapeXml(label)}</text>
+    <text x="35" y="14" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${LABEL}</text>
     <text x="${70 + rightWidth/2}" y="14" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${escapeXml(message)}</text>
   </g>
 </svg>`;
@@ -163,18 +164,18 @@ async function checkGpgKey(username) {
 
 // Generate badge based on style
 function generateBadge(hasKey, style, options) {
-  const { label, theme, username } = options;
-  
+  const { theme, username } = options;
+
   switch (style) {
     case 'card':
-      return generateCardBadge(hasKey, username, label, theme !== 'light');
+      return generateCardBadge(hasKey, username, theme !== 'light');
     case 'flat':
-      return generateFlatBadge(hasKey, label, false);
+      return generateFlatBadge(hasKey, false);
     case 'flat-square':
-      return generateFlatBadge(hasKey, label, true);
+      return generateFlatBadge(hasKey, true);
     case 'split':
     default:
-      return generateSplitBadge(hasKey, label);
+      return generateSplitBadge(hasKey);
   }
 }
 
@@ -207,13 +208,12 @@ export default {
         usage: '/{username}.svg',
         parameters: {
           style: 'split (default) | card | flat | flat-square',
-          label: 'Custom label text (default: "GPG Key")',
           theme: 'dark (default) | light (card style only)',
         },
         examples: [
           '/torvalds.svg',
           '/octocat.svg?style=card',
-          '/defunkt.svg?style=flat&label=PGP',
+          '/defunkt.svg?style=flat',
         ],
       }, null, 2), {
         headers: {
@@ -233,7 +233,7 @@ export default {
     
     // Validate username
     if (!isValidUsername(username)) {
-      const svg = generateErrorBadge('GPG Key', 'invalid user');
+      const svg = generateErrorBadge('invalid user');
       return new Response(svg, {
         headers: {
           'Content-Type': 'image/svg+xml',
@@ -245,13 +245,12 @@ export default {
     
     // Parse query parameters
     const style = url.searchParams.get('style') || 'split';
-    const label = url.searchParams.get('label') || 'GPG Key';
     const theme = url.searchParams.get('theme') || 'dark';
-    
+
     // Validate style parameter
     const validStyles = ['split', 'card', 'flat', 'flat-square'];
     if (!validStyles.includes(style)) {
-      const svg = generateErrorBadge(label, 'invalid style');
+      const svg = generateErrorBadge('invalid style');
       return new Response(svg, {
         headers: {
           'Content-Type': 'image/svg+xml',
@@ -278,9 +277,9 @@ export default {
     
     let svg;
     if (error) {
-      svg = generateErrorBadge(label, error === 'github-error' ? 'github error' : 'error');
+      svg = generateErrorBadge(error === 'github-error' ? 'github error' : 'error');
     } else {
-      svg = generateBadge(hasKey, style, { label, theme, username });
+      svg = generateBadge(hasKey, style, { theme, username });
     }
     
     // Create response

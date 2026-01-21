@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - 2026-01-20
+## [2.0.0] - 2026-01-20
+
+### Removed
+- **BREAKING:** Removed `label` query parameter - badge label is now fixed as "GPG Key"
+  - The badge serves a single purpose; custom labels added unnecessary complexity
+  - Simplifies API and reduces code surface
 
 ### Added
 - Test suite using Vitest with 33 tests covering username validation, XML escaping, and GPG key detection

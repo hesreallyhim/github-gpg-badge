@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
 
 // Split Badge Style (Modern Bold bi-colored)
-const SplitBadge = ({ available, label, scale = 1 }) => {
-    // Calculate left width based on label length (approximate)
-    const labelWidth = label.length * 7.5 + 40; // icon space + padding
-    const leftWidth = Math.max(90, labelWidth);
+const LABEL = 'GPG Key';
+
+const SplitBadge = ({ available, scale = 1 }) => {
+    const leftWidth = 90;
     const rightWidth = available ? 88 : 82;
     const totalWidth = leftWidth + rightWidth;
     
@@ -50,7 +50,7 @@ const SplitBadge = ({ available, label, scale = 1 }) => {
           </g>
           
           {/* Left text */}
-          <text x="32" y="18" fontFamily="system-ui, -apple-system, sans-serif" fontSize="12" fontWeight="600" fill="white">{label}</text>
+          <text x="32" y="18" fontFamily="system-ui, -apple-system, sans-serif" fontSize="12" fontWeight="600" fill="white">{LABEL}</text>
           
           {/* Check/X icon */}
           <g transform={`translate(${leftWidth + 10}, 7)`} fill="white">
@@ -71,7 +71,7 @@ const SplitBadge = ({ available, label, scale = 1 }) => {
   };
   
   // Card Style (Rich Information)
-  const CardBadge = ({ available, username, label, isDark = true }) => {
+  const CardBadge = ({ available, username, isDark = true }) => {
     const bg = isDark ? '#111827' : '#ffffff';
     const border = isDark ? '#374151' : '#e5e7eb';
     const textPrimary = isDark ? (available ? '#4ade80' : '#9ca3af') : (available ? '#16a34a' : '#6b7280');
@@ -108,7 +108,7 @@ const SplitBadge = ({ available, label, scale = 1 }) => {
           
           {/* Status text */}
           <text x="54" y="38" fontFamily="system-ui, -apple-system, sans-serif" fontSize="13" fontWeight="600" fill={textPrimary}>
-            {label} {available ? 'Available' : 'Not Found'}
+            {LABEL} {available ? 'Available' : 'Not Found'}
           </text>
         </g>
       </svg>
@@ -116,30 +116,30 @@ const SplitBadge = ({ available, label, scale = 1 }) => {
   };
   
   // Flat Shields.io style
-  const FlatBadge = ({ available, label, square = false }) => {
+  const FlatBadge = ({ available, square = false }) => {
     const rightWidth = available ? 62 : 42;
     const totalWidth = 70 + rightWidth;
     const radius = square ? 0 : 4;
-    
+
     return (
       <svg width={totalWidth} height="20" viewBox={`0 0 ${totalWidth} 20`} xmlns="http://www.w3.org/2000/svg">
         {/* Left section */}
         <rect x="0" y="0" width="70" height="20" fill="#555" rx={radius} ry={radius}/>
         <rect x={70 - radius} y="0" width={radius} height="20" fill="#555"/>
-        
+
         {/* Right section */}
         <rect x="70" y="0" width={rightWidth} height="20" fill={available ? '#22c55e' : '#6b7280'} rx={radius} ry={radius}/>
         <rect x="70" y="0" width={radius} height="20" fill={available ? '#22c55e' : '#6b7280'}/>
-        
+
         {/* Text shadow layer */}
         <g fill="#010101" fillOpacity="0.3">
-          <text x="35" y="15" textAnchor="middle" fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif" fontSize="11">{label}</text>
+          <text x="35" y="15" textAnchor="middle" fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif" fontSize="11">{LABEL}</text>
           <text x={70 + rightWidth/2} y="15" textAnchor="middle" fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif" fontSize="11">{available ? 'available' : 'none'}</text>
         </g>
-        
+
         {/* Text */}
         <g fill="white">
-          <text x="35" y="14" textAnchor="middle" fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif" fontSize="11">{label}</text>
+          <text x="35" y="14" textAnchor="middle" fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif" fontSize="11">{LABEL}</text>
           <text x={70 + rightWidth/2} y="14" textAnchor="middle" fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif" fontSize="11">{available ? 'available' : 'none'}</text>
         </g>
       </svg>
@@ -150,15 +150,13 @@ const SplitBadge = ({ available, label, scale = 1 }) => {
     const [username, setUsername] = useState('torvalds');
     const [hasKey, setHasKey] = useState(true);
     const [style, setStyle] = useState('split');
-    const [label, setLabel] = useState('GPG Key');
     const [theme, setTheme] = useState('dark');
     const [copied, setCopied] = useState(false);
-  
+
     const generateUrl = () => {
     const base = `https://gpg-badge.hesreallyhim.com/${username}.svg`;
     const params = new URLSearchParams();
     if (style !== 'split') params.set('style', style);
-    if (label !== 'GPG Key') params.set('label', label);
     if (style === 'card' && theme !== 'dark') params.set('theme', theme);
     const queryString = params.toString();
     return queryString ? `${base}?${queryString}` : base;
@@ -178,15 +176,15 @@ const SplitBadge = ({ available, label, scale = 1 }) => {
   const renderBadge = () => {
     switch (style) {
       case 'split':
-        return <SplitBadge available={hasKey} label={label} />;
+        return <SplitBadge available={hasKey} />;
       case 'card':
-        return <CardBadge available={hasKey} username={username} label={label} isDark={theme === 'dark'} />;
+        return <CardBadge available={hasKey} username={username} isDark={theme === 'dark'} />;
       case 'flat':
-        return <FlatBadge available={hasKey} label={label} />;
+        return <FlatBadge available={hasKey} />;
       case 'flat-square':
-        return <FlatBadge available={hasKey} label={label} square />;
+        return <FlatBadge available={hasKey} square />;
       default:
-        return <SplitBadge available={hasKey} label={label} />;
+        return <SplitBadge available={hasKey} />;
     }
   };
 
@@ -237,27 +235,15 @@ const SplitBadge = ({ available, label, scale = 1 }) => {
             {/* Username */}
             <div>
               <label className="block text-sm text-gray-400 mb-2">GitHub Username</label>
-              <input 
-                type="text" 
-                value={username} 
+              <input
+                type="text"
+                value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
                 placeholder="username"
               />
             </div>
-            
-            {/* Label */}
-            <div>
-              <label className="block text-sm text-gray-400 mb-2">Label Text</label>
-              <input 
-                type="text" 
-                value={label} 
-                onChange={(e) => setLabel(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
-                placeholder="GPG Key"
-              />
-            </div>
-            
+
             {/* Style */}
             <div>
               <label className="block text-sm text-gray-400 mb-2">Style</label>
@@ -351,32 +337,32 @@ const SplitBadge = ({ available, label, scale = 1 }) => {
                 <p className="text-xs text-gray-400 mt-1">Modern bi-colored badge with icons</p>
               </div>
               <div className="shrink-0">
-                <SplitBadge available={hasKey} label="GPG Key" />
+                <SplitBadge available={hasKey} />
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl">
               <div>
                 <span className="text-sm font-medium text-white">card</span>
                 <p className="text-xs text-gray-400 mt-1">Rich card with username display</p>
               </div>
-              <CardBadge available={hasKey} username={username} label="GPG Key" isDark={true} />
+              <CardBadge available={hasKey} username={username} isDark={true} />
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl">
               <div>
                 <span className="text-sm font-medium text-white">flat</span>
                 <p className="text-xs text-gray-400 mt-1">Classic shields.io compatible</p>
               </div>
-              <FlatBadge available={hasKey} label="GPG Key" />
+              <FlatBadge available={hasKey} />
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl">
               <div>
                 <span className="text-sm font-medium text-white">flat-square</span>
                 <p className="text-xs text-gray-400 mt-1">Square corners variant</p>
               </div>
-              <FlatBadge available={hasKey} label="GPG Key" square />
+              <FlatBadge available={hasKey} square />
             </div>
           </div>
         </section>
@@ -401,12 +387,6 @@ const SplitBadge = ({ available, label, scale = 1 }) => {
                   <td className="py-3"><code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">split</code> <code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">card</code> <code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">flat</code> <code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">flat-square</code></td>
                   <td className="py-3 text-gray-500">split</td>
                   <td className="py-3">Badge visual style</td>
-                </tr>
-                <tr className="border-b border-gray-800/50">
-                  <td className="py-3 font-mono text-green-400">label</td>
-                  <td className="py-3">any string</td>
-                  <td className="py-3 text-gray-500">GPG Key</td>
-                  <td className="py-3">Left-side label text</td>
                 </tr>
                 <tr className="border-b border-gray-800/50">
                   <td className="py-3 font-mono text-green-400">theme</td>
