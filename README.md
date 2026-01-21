@@ -10,24 +10,23 @@ If you've uploaded a GPG key to GitHub - use this badge to show others, and enco
 
 Markdown:
 ```markdown
-[![GPG Key](`https://gpg-badge.hesreallyhim.com/<username>.svg)](https://github.com/<username>.gpg)
+[![GPG Key](https://gpg-badge.hesreallyhim.com/<username>.svg)](https://github.com/<username>.gpg)
 ```
 
 HTML:
 ```html
-<a href="https://github.com/hesreallyhim.gpg">
-  <img src="`https://gpg-badge.hesreallyhim.com/hesreallyhim.svg" alt="GPG Key badge" />
+<a href="https://github.com/<username>.gpg">
+  <img src="https://gpg-badge.hesreallyhim.com/<username>.svg" alt="GPG Key badge" />
 </a>
 ```
 
 
 ## Try it in the demo
-Explore different styles, and get drop-in URLs/Markdown: **https://github-gpg-badge-demo.vercel.app/**
+Explore different styles, and get drop-in URLs/Markdown: **https://demo.gpg-badge.hesreallyhim.com/**
 
 
 ## Parameters
 - `style`: `split` (default) | `card` | `flat` | `flat-square`
-- `label`: custom text for the left side (default: `GPG Key`)
 - `theme`: `dark` (default) | `light` (card style only)
 
 Examples:
