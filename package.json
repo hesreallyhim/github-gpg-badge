@@ -24,7 +24,7 @@
     "node": "20.x"
   },
   "devDependencies": {
-    "vitest": "^4.0.17",
+    "vitest": "^4.0.18",
     "wrangler": "^4.59.3"
   }
 }
