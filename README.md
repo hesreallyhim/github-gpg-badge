@@ -30,8 +30,14 @@ Explore different styles, and get drop-in URLs/Markdown: **https://demo.gpg-badg
 - `theme`: `dark` (default) | `light` (card style only)
 
 Examples:
-- `![torvalds](https://gpg-badge.hesreallyhim.com/torvalds.svg)` ![torvalds](https://gpg-badge.hesreallyhim.com/torvalds.svg)  
-- `![hesreallyhim](https://gpg-badge.hesreallyhim.com/torvalds.svg)` ![hesreallyhim](https://gpg-badge.hesreallyhim.com/hesreallyhim.svg)
+
+| Style | Available | Missing |
+| --- | --- | --- |
+| split | ![split available](https://gpg-badge.hesreallyhim.com/hesreallyhim.svg?style=split) | ![split missing](https://gpg-badge.hesreallyhim.com/octocat.svg?style=split) |
+| card (dark) | ![card dark available](https://gpg-badge.hesreallyhim.com/hesreallyhim.svg?style=card&theme=dark) | ![card dark missing](https://gpg-badge.hesreallyhim.com/octocat.svg?style=card&theme=dark) |
+| card (light) | ![card light available](https://gpg-badge.hesreallyhim.com/hesreallyhim.svg?style=card&theme=light) | ![card light missing](https://gpg-badge.hesreallyhim.com/octocat.svg?style=card&theme=light) |
+| flat | ![flat available](https://gpg-badge.hesreallyhim.com/hesreallyhim.svg?style=flat) | ![flat missing](https://gpg-badge.hesreallyhim.com/octocat.svg?style=flat) |
+| flat-square | ![flat square available](https://gpg-badge.hesreallyhim.com/hesreallyhim.svg?style=flat-square) | ![flat square missing](https://gpg-badge.hesreallyhim.com/octocat.svg?style=flat-square) |
 
 ## More Info:
 - [GitHub's documentation about GPG keys](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
