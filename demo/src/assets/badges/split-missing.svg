@@ -1,0 +1,36 @@
+<svg width="172" height="28" viewBox="0 0 172 28" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="leftGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#374151"/>
+      <stop offset="100%" stop-color="#1f2937"/>
+    </linearGradient>
+    <linearGradient id="rightGradRed" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <rect x="0" y="0" width="90" height="28" rx="6" ry="6" fill="url(#leftGrad)"/>
+    <rect x="84" y="0" width="10" height="28" fill="url(#leftGrad)"/>
+
+    <rect x="90" y="0" width="82" height="28" rx="6" ry="6" fill="url(#rightGradRed)"/>
+    <rect x="90" y="0" width="10" height="28" fill="url(#rightGradRed)"/>
+
+    <g transform="translate(12, 7)" fill="white">
+      <rect x="2" y="5" width="10" height="8" rx="1" fill-opacity="0.9"/>
+      <path d="M4 5V3.5C4 1.57 5.57 0 7.5 0S11 1.57 11 3.5V5" stroke="white" stroke-width="1.5" fill="none" stroke-opacity="0.9"/>
+    </g>
+
+    <text x="32" y="18" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="white">GPG Key</text>
+
+    <g transform="translate(100, 7)" fill="white">
+      <path d="M7 0C3.13 0 0 3.13 0 7s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm2.78 8.72a.75.75 0 11-1.06 1.06L7 8.06l-1.72 1.72a.75.75 0 01-1.06-1.06L5.94 7 4.22 5.28a.75.75 0 011.06-1.06L7 5.94l1.72-1.72a.75.75 0 111.06 1.06L8.06 7l1.72 1.72z" fill-opacity="0.95"/>
+    </g>
+
+    <text x="122" y="18" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="white">Missing</text>
+  </g>
+</svg>

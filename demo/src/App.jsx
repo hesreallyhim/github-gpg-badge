@@ -1,150 +1,63 @@
 import { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
+import splitVerified from './assets/badges/split-verified.svg';
+import splitMissing from './assets/badges/split-missing.svg';
+import cardDarkAvailableTemplate from './assets/badges/card-dark-available.svg?raw';
+import cardDarkMissingTemplate from './assets/badges/card-dark-missing.svg?raw';
+import cardLightAvailableTemplate from './assets/badges/card-light-available.svg?raw';
+import cardLightMissingTemplate from './assets/badges/card-light-missing.svg?raw';
+import flatAvailable from './assets/badges/flat-available.svg';
+import flatMissing from './assets/badges/flat-missing.svg';
+import flatSquareAvailable from './assets/badges/flat-square-available.svg';
+import flatSquareMissing from './assets/badges/flat-square-missing.svg';
 
-// Split Badge Style (Modern Bold bi-colored)
 const LABEL = 'GPG Key';
 
-const SplitBadge = ({ available, scale = 1 }) => {
-    const leftWidth = 90;
-    const rightWidth = available ? 88 : 82;
-    const totalWidth = leftWidth + rightWidth;
-    
-    return (
-      <svg 
-        width={scale * totalWidth} 
-        height={scale * 28} 
-        viewBox={`0 0 ${totalWidth} 28`}
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <linearGradient id="leftGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#374151"/>
-            <stop offset="100%" stopColor="#1f2937"/>
-          </linearGradient>
-          <linearGradient id="rightGradGreen" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#22c55e"/>
-            <stop offset="100%" stopColor="#16a34a"/>
-          </linearGradient>
-          <linearGradient id="rightGradRed" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#ef4444"/>
-            <stop offset="100%" stopColor="#dc2626"/>
-          </linearGradient>
-          <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
-            <feDropShadow dx="0" dy="1" stdDeviation="1" floodOpacity="0.3"/>
-          </filter>
-        </defs>
-        
-        <g filter="url(#shadow)">
-          {/* Left section */}
-          <rect x="0" y="0" width={leftWidth} height="28" rx="6" ry="6" fill="url(#leftGrad)"/>
-          <rect x={leftWidth - 6} y="0" width="10" height="28" fill="url(#leftGrad)"/>
-          
-          {/* Right section */}
-          <rect x={leftWidth} y="0" width={rightWidth} height="28" rx="6" ry="6" fill={available ? "url(#rightGradGreen)" : "url(#rightGradRed)"}/>
-          <rect x={leftWidth} y="0" width="10" height="28" fill={available ? "url(#rightGradGreen)" : "url(#rightGradRed)"}/>
-          
-          {/* Lock icon */}
-          <g transform="translate(12, 7)" fill="white">
-            <rect x="2" y="5" width="10" height="8" rx="1" fillOpacity="0.9"/>
-            <path d="M4 5V3.5C4 1.57 5.57 0 7.5 0S11 1.57 11 3.5V5" stroke="white" strokeWidth="1.5" fill="none" strokeOpacity="0.9"/>
-          </g>
-          
-          {/* Left text */}
-          <text x="32" y="18" fontFamily="system-ui, -apple-system, sans-serif" fontSize="12" fontWeight="600" fill="white">{LABEL}</text>
-          
-          {/* Check/X icon */}
-          <g transform={`translate(${leftWidth + 10}, 7)`} fill="white">
-            {available ? (
-              <path d="M7 0C3.13 0 0 3.13 0 7s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm3.54 5.54l-4 4a.75.75 0 01-1.06 0l-2-2a.75.75 0 111.06-1.06L6 7.94l3.47-3.47a.75.75 0 111.06 1.06z" fillOpacity="0.95"/>
-            ) : (
-              <path d="M7 0C3.13 0 0 3.13 0 7s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm2.78 8.72a.75.75 0 11-1.06 1.06L7 8.06l-1.72 1.72a.75.75 0 01-1.06-1.06L5.94 7 4.22 5.28a.75.75 0 011.06-1.06L7 5.94l1.72-1.72a.75.75 0 111.06 1.06L8.06 7l1.72 1.72z" fillOpacity="0.95"/>
-            )}
-          </g>
-          
-          {/* Right text */}
-          <text x={leftWidth + 32} y="18" fontFamily="system-ui, -apple-system, sans-serif" fontSize="11" fontWeight="600" fill="white">
-            {available ? 'Verified' : 'Missing'}
-          </text>
-        </g>
-      </svg>
-    );
-  };
-  
-  // Card Style (Rich Information)
-  const CardBadge = ({ available, username, isDark = true }) => {
-    const bg = isDark ? '#111827' : '#ffffff';
-    const border = isDark ? '#374151' : '#e5e7eb';
-    const textPrimary = isDark ? (available ? '#4ade80' : '#9ca3af') : (available ? '#16a34a' : '#6b7280');
-    const textSecondary = isDark ? '#9ca3af' : '#6b7280';
-    const iconBg = available 
-      ? (isDark ? 'rgba(34, 197, 94, 0.2)' : 'rgba(34, 197, 94, 0.1)')
-      : (isDark ? '#374151' : '#f3f4f6');
-    const iconColor = available ? (isDark ? '#4ade80' : '#16a34a') : '#9ca3af';
-    
-    return (
-      <svg width="220" height="52" viewBox="0 0 220 52" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="120%">
-            <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.15"/>
-          </filter>
-        </defs>
-        
-        <g filter="url(#cardShadow)">
-          {/* Card background */}
-          <rect x="0" y="0" width="220" height="52" rx="12" fill={bg} stroke={border} strokeWidth="1"/>
-          
-          {/* Icon container */}
-          <rect x="12" y="10" width="32" height="32" rx="8" fill={iconBg}/>
-          
-          {/* Shield icon */}
-          <g transform="translate(18, 16)" fill={iconColor}>
-            <path d="M10 0L0 4v6c0 5.55 4.16 10.74 10 12 5.84-1.26 10-6.45 10-12V4L10 0zm0 10.99h8c-.53 4.12-3.28 7.79-8 8.94V11H2V5.3l8-3.11v8.8z"/>
-          </g>
-          
-          {/* Username */}
-          <text x="54" y="22" fontFamily="system-ui, -apple-system, sans-serif" fontSize="11" fill={textSecondary}>
-            @{username}
-          </text>
-          
-          {/* Status text */}
-          <text x="54" y="38" fontFamily="system-ui, -apple-system, sans-serif" fontSize="13" fontWeight="600" fill={textPrimary}>
-            {LABEL} {available ? 'Available' : 'Not Found'}
-          </text>
-        </g>
-      </svg>
-    );
-  };
-  
-  // Flat Shields.io style
-  const FlatBadge = ({ available, square = false }) => {
-    const rightWidth = available ? 62 : 42;
-    const totalWidth = 70 + rightWidth;
-    const radius = square ? 0 : 4;
+const escapeXml = (value) =>
+  String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 
-    return (
-      <svg width={totalWidth} height="20" viewBox={`0 0 ${totalWidth} 20`} xmlns="http://www.w3.org/2000/svg">
-        {/* Left section */}
-        <rect x="0" y="0" width="70" height="20" fill="#555" rx={radius} ry={radius}/>
-        <rect x={70 - radius} y="0" width={radius} height="20" fill="#555"/>
+const toDataUri = (svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
-        {/* Right section */}
-        <rect x="70" y="0" width={rightWidth} height="20" fill={available ? '#22c55e' : '#6b7280'} rx={radius} ry={radius}/>
-        <rect x="70" y="0" width={radius} height="20" fill={available ? '#22c55e' : '#6b7280'}/>
+const CARD_TEMPLATES = {
+  dark: {
+    available: cardDarkAvailableTemplate,
+    missing: cardDarkMissingTemplate,
+  },
+  light: {
+    available: cardLightAvailableTemplate,
+    missing: cardLightMissingTemplate,
+  },
+};
 
-        {/* Text shadow layer */}
-        <g fill="#010101" fillOpacity="0.3">
-          <text x="35" y="15" textAnchor="middle" fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif" fontSize="11">{LABEL}</text>
-          <text x={70 + rightWidth/2} y="15" textAnchor="middle" fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif" fontSize="11">{available ? 'available' : 'none'}</text>
-        </g>
+const BADGE_ASSETS = {
+  split: {
+    available: splitVerified,
+    missing: splitMissing,
+  },
+  flat: {
+    available: flatAvailable,
+    missing: flatMissing,
+  },
+  'flat-square': {
+    available: flatSquareAvailable,
+    missing: flatSquareMissing,
+  },
+};
 
-        {/* Text */}
-        <g fill="white">
-          <text x="35" y="14" textAnchor="middle" fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif" fontSize="11">{LABEL}</text>
-          <text x={70 + rightWidth/2} y="14" textAnchor="middle" fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif" fontSize="11">{available ? 'available' : 'none'}</text>
-        </g>
-      </svg>
-    );
-  };
+const getBadgeSrc = (style, available, theme, username) => {
+  if (style === 'card') {
+    const palette = CARD_TEMPLATES[theme] ?? CARD_TEMPLATES.dark;
+    const template = palette[available ? 'available' : 'missing'];
+    const safeUsername = escapeXml(username?.trim() || 'username');
+    return toDataUri(template.replace(/username<!--__USERNAME__-->/g, safeUsername));
+  }
+
+  const palette = BADGE_ASSETS[style] ?? BADGE_ASSETS.split;
+  return palette[available ? 'available' : 'missing'];
+};
   
   export default function GPGBadgeFinal() {
     const [username, setUsername] = useState('torvalds');
@@ -174,18 +87,9 @@ const SplitBadge = ({ available, scale = 1 }) => {
   };
 
   const renderBadge = () => {
-    switch (style) {
-      case 'split':
-        return <SplitBadge available={hasKey} />;
-      case 'card':
-        return <CardBadge available={hasKey} username={username} isDark={theme === 'dark'} />;
-      case 'flat':
-        return <FlatBadge available={hasKey} />;
-      case 'flat-square':
-        return <FlatBadge available={hasKey} square />;
-      default:
-        return <SplitBadge available={hasKey} />;
-    }
+    const src = getBadgeSrc(style, hasKey, theme, username);
+    const status = hasKey ? 'available' : 'missing';
+    return <img src={src} alt={`${LABEL} ${status} badge`} className="block" />;
   };
 
   return (
@@ -337,7 +241,11 @@ const SplitBadge = ({ available, scale = 1 }) => {
                 <p className="text-xs text-gray-400 mt-1">Modern bi-colored badge with icons</p>
               </div>
               <div className="shrink-0">
-                <SplitBadge available={hasKey} />
+                <img
+                  src={BADGE_ASSETS.split[hasKey ? 'available' : 'missing']}
+                  alt={`${LABEL} split badge`}
+                  className="block"
+                />
               </div>
             </div>
 
@@ -346,7 +254,11 @@ const SplitBadge = ({ available, scale = 1 }) => {
                 <span className="text-sm font-medium text-white">card</span>
                 <p className="text-xs text-gray-400 mt-1">Rich card with username display</p>
               </div>
-              <CardBadge available={hasKey} username={username} isDark={true} />
+              <img
+                src={getBadgeSrc('card', hasKey, 'dark', username)}
+                alt={`${LABEL} card badge`}
+                className="block"
+              />
             </div>
 
             <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl">
@@ -354,7 +266,11 @@ const SplitBadge = ({ available, scale = 1 }) => {
                 <span className="text-sm font-medium text-white">flat</span>
                 <p className="text-xs text-gray-400 mt-1">Classic shields.io compatible</p>
               </div>
-              <FlatBadge available={hasKey} />
+              <img
+                src={BADGE_ASSETS.flat[hasKey ? 'available' : 'missing']}
+                alt={`${LABEL} flat badge`}
+                className="block"
+              />
             </div>
 
             <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl">
@@ -362,7 +278,11 @@ const SplitBadge = ({ available, scale = 1 }) => {
                 <span className="text-sm font-medium text-white">flat-square</span>
                 <p className="text-xs text-gray-400 mt-1">Square corners variant</p>
               </div>
-              <FlatBadge available={hasKey} square />
+              <img
+                src={BADGE_ASSETS['flat-square'][hasKey ? 'available' : 'missing']}
+                alt={`${LABEL} flat-square badge`}
+                className="block"
+              />
             </div>
           </div>
         </section>
