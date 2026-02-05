@@ -1,6 +1,6 @@
 {
   "name": "github-gpg-badge",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "type": "module",
   "description": "A server for generating badges that show whether a GitHub user has a GPG key publicly associated with their account",
   "main": "src/index.js",
@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "vitest": "^4.0.18",
-    "wrangler": "^4.61.1"
+    "wrangler": "^4.63.0"
   }
 }
