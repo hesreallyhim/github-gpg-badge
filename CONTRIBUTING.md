@@ -40,6 +40,15 @@ The demo calls the Worker host set in `demo/src/App.jsx` (`generateUrl` base).
 - Worker: `npm run dev` (root, Cloudflare dev server at http://localhost:8787).
 - Demo: `cd demo && npm run dev` (Vite dev server). Point `generateUrl` to your Worker host or a mock during local testing.
 
+### Modifying badge styles
+Badge SVG generators live in `src/badges.js`. Static SVG examples are generated to `src/badges/` for editor preview.
+
+After changing badge code:
+1. Run `npm run generate:badges` to regenerate static SVGs
+2. Commit both the code changes and updated SVGs
+
+The `test` and `deploy` scripts run `check:badges` which fails if the static SVGs don't match the generators. This prevents deploying with stale examples.
+
 ## Maintenance notes
 - Keep `wrangler` current (`npm install -D wrangler@latest`).
 - Demo uses Tailwind 4.x with the `@tailwindcss/vite` plugin; Vite config uses base `/` for Vercel. Adjust base if targeting Pages.

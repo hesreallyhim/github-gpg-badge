@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-02-05
+
+### Added
+- New `for-the-badge` style - 28px tall, uppercase, bold text (matches shields.io style)
+- Static SVG badge examples in `src/badges/` for editor preview
+- `npm run generate:badges` script to regenerate static SVGs from badge code
+- `npm run check:badges` script to verify static SVGs match generators (runs on test/deploy)
+
+### Changed
+- Extracted badge generators to `src/badges.js` module
+- Demo now includes custom height documentation (use `<img height="X">`)
+
 ## [2.0.0] - 2026-01-20
 
 ### Removed

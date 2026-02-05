@@ -152,7 +152,7 @@ const getBadgeSrc = (style, available, theme, username) => {
             <div>
               <label className="block text-sm text-gray-400 mb-2">Style</label>
               <div className="flex flex-wrap gap-2">
-                {['split', 'card', 'flat', 'flat-square'].map((s) => (
+                {['split', 'card', 'flat', 'flat-square', 'for-the-badge'].map((s) => (
                   <button
                     key={s}
                     onClick={() => setStyle(s)}
@@ -213,7 +213,7 @@ const getBadgeSrc = (style, available, theme, username) => {
           </div>
           
           {/* Markdown */}
-          <div>
+          <div className="mb-4">
             <label className="block text-sm text-gray-400 mb-2">Markdown</label>
             <div className="flex gap-2">
               <code className="flex-1 bg-gray-950 border border-gray-800 rounded-lg px-4 py-2 text-green-400 text-sm font-mono overflow-x-auto">
@@ -226,6 +226,16 @@ const getBadgeSrc = (style, available, theme, username) => {
                 {copied ? <Check size={18} className="text-green-400" /> : <Copy size={18} />}
               </button>
             </div>
+          </div>
+
+          {/* Custom height tip */}
+          <div className="mt-4 p-3 bg-gray-800/50 rounded-lg">
+            <p className="text-sm text-gray-400">
+              <span className="text-gray-300 font-medium">Custom height:</span> Use HTML to resize the badge.
+            </p>
+            <code className="block mt-2 text-xs text-green-400 font-mono">
+              {`<img src="${generateUrl()}" height="28">`}
+            </code>
           </div>
         </section>
 
@@ -284,6 +294,18 @@ const getBadgeSrc = (style, available, theme, username) => {
                 className="block"
               />
             </div>
+
+            <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl">
+              <div>
+                <span className="text-sm font-medium text-white">for-the-badge</span>
+                <p className="text-xs text-gray-400 mt-1">Large uppercase shields.io style</p>
+              </div>
+              <img
+                src={`https://gpg-badge.hesreallyhim.com/${username || 'torvalds'}.svg?style=for-the-badge`}
+                alt={`${LABEL} for-the-badge badge`}
+                className="block"
+              />
+            </div>
           </div>
         </section>
 
@@ -304,7 +326,7 @@ const getBadgeSrc = (style, available, theme, username) => {
               <tbody className="text-gray-300">
                 <tr className="border-b border-gray-800/50">
                   <td className="py-3 font-mono text-green-400">style</td>
-                  <td className="py-3"><code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">split</code> <code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">card</code> <code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">flat</code> <code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">flat-square</code></td>
+                  <td className="py-3"><code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">split</code> <code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">card</code> <code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">flat</code> <code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">flat-square</code> <code className="text-xs bg-gray-800 px-1.5 py-0.5 rounded">for-the-badge</code></td>
                   <td className="py-3 text-gray-500">split</td>
                   <td className="py-3">Badge visual style</td>
                 </tr>
