@@ -1,4 +1,4 @@
-import { escapeXml } from './utils.js';
+import { escapeXml, isValidUsername } from './utils.js';
 
 const LABEL = 'GPG Key';
 
@@ -49,6 +49,9 @@ export const generateSplitBadge = (hasKey) => {
 };
 
 export const generateCardBadge = (hasKey, username, isDark = true) => {
+  // Strict validation - only alphanumeric + hyphens allowed
+  const safeUsername = isValidUsername(username) ? username : 'unknown';
+
   const bg = isDark ? '#111827' : '#ffffff';
   const border = isDark ? '#374151' : '#e5e7eb';
   const textPrimary = isDark
@@ -73,7 +76,7 @@ export const generateCardBadge = (hasKey, username, isDark = true) => {
     <g transform="translate(18, 16)" fill="${iconColor}">
       <path d="M10 0L0 4v6c0 5.55 4.16 10.74 10 12 5.84-1.26 10-6.45 10-12V4L10 0zm0 10.99h8c-.53 4.12-3.28 7.79-8 8.94V11H2V5.3l8-3.11v8.8z"/>
     </g>
-    <text x="54" y="22" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" fill="${textSecondary}">@${escapeXml(username)}</text>
+    <text x="54" y="22" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" fill="${textSecondary}">@${safeUsername}</text>
     <text x="54" y="38" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="${textPrimary}">${LABEL} ${statusText}</text>
   </g>
 </svg>`;

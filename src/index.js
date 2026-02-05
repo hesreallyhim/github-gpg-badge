@@ -8,9 +8,9 @@ import { generateBadge, generateErrorBadge, VALID_STYLES } from './badges.js';
  * has a public GPG key available at github.com/{username}.gpg
  *
  * Usage:
- *   GET /{username}.svg
- *   GET /{username}.svg?style=split|card|flat|flat-square|for-the-badge
- *   GET /{username}.svg?style=card&theme=light|dark
+ *   GET /{username}
+ *   GET /{username}?style=split|card|flat|flat-square|for-the-badge
+ *   GET /{username}?style=card&theme=light|dark
  */
 
 // Check if GitHub user has GPG key
@@ -18,7 +18,7 @@ async function checkGpgKey(username) {
   try {
     const response = await fetch(`https://github.com/${username}.gpg`, {
       headers: {
-        'User-Agent': 'GPG-Badge-Service/1.0',
+        'User-Agent': 'GPG-Badge-Service/2.2',
       },
     });
 
@@ -39,7 +39,7 @@ async function checkGpgKey(username) {
 
 // Main request handler
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request) {
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -63,16 +63,16 @@ export default {
     if (path === '/' || path === '') {
       return new Response(JSON.stringify({
         name: 'GitHub GPG Key Badge Service',
-        usage: '/{username}.svg',
+        usage: '/{username}',
         parameters: {
           style: VALID_STYLES.join(' | '),
           theme: 'dark (default) | light (card style only)',
         },
         examples: [
-          '/torvalds.svg',
-          '/octocat.svg?style=card',
-          '/defunkt.svg?style=flat',
-          '/torvalds.svg?style=for-the-badge',
+          '/torvalds',
+          '/octocat?style=card',
+          '/defunkt?style=flat',
+          '/torvalds?style=for-the-badge',
         ],
       }, null, 2), {
         headers: {
@@ -82,13 +82,17 @@ export default {
       });
     }
 
-    // Parse username from path
-    const match = path.match(/^\/([^\/]+)\.svg$/);
+    // Parse username from path (supports both /username and /username.svg)
+    const match = path.match(/^\/([^\/]+?)(?:\.svg)?$/);
     if (!match) {
-      return new Response('Not found. Usage: /{username}.svg', { status: 404 });
+      return new Response('Not found. Usage: /{username}', { status: 404 });
     }
 
     const username = match[1];
+
+    // Cache durations: 12h if key exists (stable), 5min if missing (user may be adding)
+    const CACHE_HAS_KEY = 'public, max-age=43200';  // 12 hours
+    const CACHE_NO_KEY = 'public, max-age=300';     // 5 minutes
 
     // Validate username
     if (!isValidUsername(username)) {
@@ -96,7 +100,7 @@ export default {
       return new Response(svg, {
         headers: {
           'Content-Type': 'image/svg+xml',
-          'Cache-Control': 'public, max-age=300',
+          'Cache-Control': CACHE_NO_KEY,
           'Access-Control-Allow-Origin': '*',
         },
       });
@@ -112,50 +116,34 @@ export default {
       return new Response(svg, {
         headers: {
           'Content-Type': 'image/svg+xml',
-          'Cache-Control': 'public, max-age=300',
+          'Cache-Control': CACHE_NO_KEY,
           'Access-Control-Allow-Origin': '*',
         },
       });
     }
 
-    // Check cache first
-    const cache = caches.default;
-    const cacheKey = new Request(url.toString(), request);
-    let response = await cache.match(cacheKey);
-
-    if (response) {
-      // Return cached response with cache hit header
-      response = new Response(response.body, response);
-      response.headers.set('X-Cache', 'HIT');
-      return response;
-    }
-
     // Fetch GPG key status from GitHub
     const { hasKey, error } = await checkGpgKey(username);
 
-    let svg;
     if (error) {
-      svg = generateErrorBadge(error === 'github-error' ? 'github error' : 'error');
-    } else {
-      svg = generateBadge(hasKey, style, { theme, username });
+      const svg = generateErrorBadge(error === 'github-error' ? 'github error' : 'error');
+      return new Response(svg, {
+        headers: {
+          'Content-Type': 'image/svg+xml',
+          'Cache-Control': CACHE_NO_KEY,
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
     }
 
-    // Create response
-    response = new Response(svg, {
+    const svg = generateBadge(hasKey, style, { theme, username });
+    return new Response(svg, {
       headers: {
         'Content-Type': 'image/svg+xml',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+        'Cache-Control': hasKey ? CACHE_HAS_KEY : CACHE_NO_KEY,
         'Access-Control-Allow-Origin': '*',
-        'X-Cache': 'MISS',
         'X-GPG-Status': hasKey ? 'available' : 'none',
       },
     });
-
-    // Store in cache (don't await, let it happen in background)
-    if (!error) {
-      ctx.waitUntil(cache.put(cacheKey, response.clone()));
-    }
-
-    return response;
   },
 };

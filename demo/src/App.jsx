@@ -1,83 +1,81 @@
 import { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
-import splitVerified from './assets/badges/split-verified.svg';
+
+// Static badge assets (snapshotted from API via CI)
+import splitAvailable from './assets/badges/split-available.svg';
 import splitMissing from './assets/badges/split-missing.svg';
-import cardDarkAvailableTemplate from './assets/badges/card-dark-available.svg?raw';
-import cardDarkMissingTemplate from './assets/badges/card-dark-missing.svg?raw';
-import cardLightAvailableTemplate from './assets/badges/card-light-available.svg?raw';
-import cardLightMissingTemplate from './assets/badges/card-light-missing.svg?raw';
+import cardDarkAvailable from './assets/badges/card-dark-available.svg?raw';
+import cardDarkMissing from './assets/badges/card-dark-missing.svg?raw';
+import cardLightAvailable from './assets/badges/card-light-available.svg?raw';
+import cardLightMissing from './assets/badges/card-light-missing.svg?raw';
 import flatAvailable from './assets/badges/flat-available.svg';
 import flatMissing from './assets/badges/flat-missing.svg';
 import flatSquareAvailable from './assets/badges/flat-square-available.svg';
 import flatSquareMissing from './assets/badges/flat-square-missing.svg';
+import forTheBadgeAvailable from './assets/badges/for-the-badge-available.svg';
+import forTheBadgeMissing from './assets/badges/for-the-badge-missing.svg';
 
-const LABEL = 'GPG Key';
+const API_BASE = 'https://gpg-badge.hesreallyhim.com';
+const DEMO_USER_AVAILABLE = 'hesreallyhim';
+const DEMO_USER_MISSING = 'octocat';
 
-const escapeXml = (value) =>
-  String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+// GitHub username: 1-39 chars, alphanumeric + hyphens, no consecutive hyphens, can't start/end with hyphen
+const sanitizeUsername = (value) => {
+  return value.replace(/[^a-zA-Z0-9-]/g, '').slice(0, 39);
+};
+
+const isValidUsername = (value) => {
+  if (typeof value !== 'string') return false;
+  if (value.length === 0 || value.length > 39) return false;
+  if (/^-|-$|--/.test(value)) return false;
+  return /^[a-zA-Z0-9-]+$/.test(value);
+};
+
+const getBadgeUrl = (username, style, theme) => {
+  const params = new URLSearchParams();
+  if (style !== 'split') params.set('style', style);
+  if (style === 'card') params.set('theme', theme);
+  const query = params.toString();
+  return `${API_BASE}/${username}${query ? `?${query}` : ''}`;
+};
 
 const toDataUri = (svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
-const CARD_TEMPLATES = {
-  dark: {
-    available: cardDarkAvailableTemplate,
-    missing: cardDarkMissingTemplate,
-  },
-  light: {
-    available: cardLightAvailableTemplate,
-    missing: cardLightMissingTemplate,
-  },
-};
-
 const BADGE_ASSETS = {
-  split: {
-    available: splitVerified,
-    missing: splitMissing,
-  },
-  flat: {
-    available: flatAvailable,
-    missing: flatMissing,
-  },
-  'flat-square': {
-    available: flatSquareAvailable,
-    missing: flatSquareMissing,
-  },
+  split: { available: splitAvailable, missing: splitMissing },
+  flat: { available: flatAvailable, missing: flatMissing },
+  'flat-square': { available: flatSquareAvailable, missing: flatSquareMissing },
+  'for-the-badge': { available: forTheBadgeAvailable, missing: forTheBadgeMissing },
 };
 
-const getBadgeSrc = (style, available, theme, username) => {
-  if (style === 'card') {
-    const palette = CARD_TEMPLATES[theme] ?? CARD_TEMPLATES.dark;
-    const template = palette[available ? 'available' : 'missing'];
-    const safeUsername = escapeXml(username?.trim() || 'username');
-    return toDataUri(template.replace(/username<!--__USERNAME__-->/g, safeUsername));
-  }
-
-  const palette = BADGE_ASSETS[style] ?? BADGE_ASSETS.split;
-  return palette[available ? 'available' : 'missing'];
+const CARD_TEMPLATES = {
+  dark: { available: cardDarkAvailable, missing: cardDarkMissing },
+  light: { available: cardLightAvailable, missing: cardLightMissing },
 };
-  
-  export default function GPGBadgeFinal() {
-    const [username, setUsername] = useState('torvalds');
-    const [hasKey, setHasKey] = useState(true);
-    const [style, setStyle] = useState('split');
-    const [theme, setTheme] = useState('dark');
-    const [copied, setCopied] = useState(false);
 
-    const generateUrl = () => {
-    const base = `https://gpg-badge.hesreallyhim.com/${username}.svg`;
-    const params = new URLSearchParams();
-    if (style !== 'split') params.set('style', style);
-    if (style === 'card' && theme !== 'dark') params.set('theme', theme);
-    const queryString = params.toString();
-    return queryString ? `${base}?${queryString}` : base;
+export default function GPGBadgeFinal() {
+  const [username, setUsername] = useState('torvalds');
+  const [hasKey, setHasKey] = useState(true);
+  const [style, setStyle] = useState('split');
+  const [theme, setTheme] = useState('dark');
+  const [copied, setCopied] = useState(false);
+
+  const demoUsername = hasKey ? DEMO_USER_AVAILABLE : DEMO_USER_MISSING;
+  const safeUsername = isValidUsername(username) ? username : '';
+
+  const handleUsernameChange = (e) => {
+    setUsername(sanitizeUsername(e.target.value));
+  };
+
+  const displayUsername = safeUsername || '<username>';
+
+  const generateUrl = () => {
+    return getBadgeUrl(displayUsername, style, theme);
   };
 
   const generateMarkdown = () => {
-    const url = generateUrl();
-    return `[![GPG Key](${url})](https://github.com/${username}.gpg)`;
+    const url = getBadgeUrl(displayUsername, style, theme);
+    return `[![GPG Key](${url})](https://github.com/${displayUsername}.gpg)`;
   };
 
   const copyToClipboard = (text) => {
@@ -86,11 +84,23 @@ const getBadgeSrc = (style, available, theme, username) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const renderBadge = () => {
-    const src = getBadgeSrc(style, hasKey, theme, username);
-    const status = hasKey ? 'available' : 'missing';
-    return <img src={src} alt={`${LABEL} ${status} badge`} className="block" />;
+  // Get preview src - Card does username replacement, others use static assets
+  const getPreviewSrc = (badgeStyle, badgeTheme = 'dark') => {
+    if (badgeStyle === 'card') {
+      const templates = CARD_TEMPLATES[badgeTheme] || CARD_TEMPLATES.dark;
+      const svg = templates[hasKey ? 'available' : 'missing'];
+      if (safeUsername) {
+        const replaced = svg.replace(`@${demoUsername}`, `@${safeUsername}`);
+        return toDataUri(replaced);
+      }
+      return toDataUri(svg);
+    }
+    const assets = BADGE_ASSETS[badgeStyle] || BADGE_ASSETS.split;
+    return assets[hasKey ? 'available' : 'missing'];
   };
+
+  const previewSrc = getPreviewSrc(style, theme);
+  const previewAlt = `GPG Key ${hasKey ? 'available' : 'missing'} badge`;
 
   return (
     <div className="min-h-screen bg-gray-950 text-white p-8">
@@ -103,7 +113,7 @@ const getBadgeSrc = (style, available, theme, username) => {
         {/* Live Preview */}
         <section className="p-8 bg-gray-900 rounded-2xl border border-gray-800 mb-8">
           <div className="flex justify-center items-center min-h-20 mb-6">
-            {renderBadge()}
+            <img src={previewSrc} alt={previewAlt} className="block" />
           </div>
           
           {/* Toggle state */}
@@ -142,9 +152,11 @@ const getBadgeSrc = (style, available, theme, username) => {
               <input
                 type="text"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={handleUsernameChange}
                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
                 placeholder="username"
+                pattern="[a-zA-Z0-9-]+"
+                maxLength={39}
               />
             </div>
 
@@ -183,7 +195,7 @@ const getBadgeSrc = (style, available, theme, username) => {
                           : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                       }`}
                     >
-                      {t}
+                      {t === 'dark' ? 'dark (default)' : t}
                     </button>
                   ))}
                 </div>
@@ -242,7 +254,7 @@ const getBadgeSrc = (style, available, theme, username) => {
         {/* All Styles Preview */}
         <section className="p-6 bg-gray-900 rounded-2xl border border-gray-800">
           <h2 className="text-lg font-semibold mb-4 text-gray-300">All Styles</h2>
-          
+
           <div className="space-y-6">
             <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl">
               <div className="shrink-0 mr-4">
@@ -252,8 +264,8 @@ const getBadgeSrc = (style, available, theme, username) => {
               </div>
               <div className="shrink-0">
                 <img
-                  src={BADGE_ASSETS.split[hasKey ? 'available' : 'missing']}
-                  alt={`${LABEL} split badge`}
+                  src={getPreviewSrc('split')}
+                  alt="GPG Key split badge"
                   className="block"
                 />
               </div>
@@ -265,8 +277,8 @@ const getBadgeSrc = (style, available, theme, username) => {
                 <p className="text-xs text-gray-400 mt-1">Rich card with username display</p>
               </div>
               <img
-                src={getBadgeSrc('card', hasKey, 'dark', username)}
-                alt={`${LABEL} card badge`}
+                src={getPreviewSrc('card', 'dark')}
+                alt="GPG Key card badge"
                 className="block"
               />
             </div>
@@ -277,8 +289,8 @@ const getBadgeSrc = (style, available, theme, username) => {
                 <p className="text-xs text-gray-400 mt-1">Classic shields.io compatible</p>
               </div>
               <img
-                src={BADGE_ASSETS.flat[hasKey ? 'available' : 'missing']}
-                alt={`${LABEL} flat badge`}
+                src={getPreviewSrc('flat')}
+                alt="GPG Key flat badge"
                 className="block"
               />
             </div>
@@ -289,8 +301,8 @@ const getBadgeSrc = (style, available, theme, username) => {
                 <p className="text-xs text-gray-400 mt-1">Square corners variant</p>
               </div>
               <img
-                src={BADGE_ASSETS['flat-square'][hasKey ? 'available' : 'missing']}
-                alt={`${LABEL} flat-square badge`}
+                src={getPreviewSrc('flat-square')}
+                alt="GPG Key flat-square badge"
                 className="block"
               />
             </div>
@@ -301,8 +313,8 @@ const getBadgeSrc = (style, available, theme, username) => {
                 <p className="text-xs text-gray-400 mt-1">Large uppercase shields.io style</p>
               </div>
               <img
-                src={`https://gpg-badge.hesreallyhim.com/${username || 'torvalds'}.svg?style=for-the-badge`}
-                alt={`${LABEL} for-the-badge badge`}
+                src={getPreviewSrc('for-the-badge')}
+                alt="GPG Key for-the-badge badge"
                 className="block"
               />
             </div>

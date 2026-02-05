@@ -6,12 +6,11 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "npm run check:badges && wrangler deploy",
+    "deploy": "wrangler deploy",
     "tail": "wrangler tail",
-    "test": "npm run check:badges && vitest run",
+    "test": "vitest run",
     "test:watch": "vitest",
-    "generate:badges": "node scripts/generate-badges.js",
-    "check:badges": "node scripts/generate-badges.js --check"
+    "snapshot:badges": "node scripts/snapshot-badges.js"
   },
   "keywords": [
     "github",
